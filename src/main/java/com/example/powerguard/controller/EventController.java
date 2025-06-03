@@ -1,21 +1,19 @@
 package com.example.powerguard.controller;
 
-import com.example.powerguard.dto.EventRequestDTO;
-import com.example.powerguard.dto.EventResponseDTO;
 import com.example.powerguard.model.Event;
 import com.example.powerguard.service.EventService;
-
-import jakarta.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/eventos")
+@RequestMapping("/api/eventos")     
+@CrossOrigin(origins = {"http://localhost:8081", "http://127.0.0.1:8081"}, 
+             allowedHeaders = "*",
+             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+             allowCredentials = "true")
 public class EventController {
 
     private final EventService service;
@@ -25,41 +23,51 @@ public class EventController {
     }
 
     @PostMapping("/falha")
-    public ResponseEntity<EventResponseDTO> registrarFalhaEnergia(@Valid @RequestBody EventRequestDTO dto) {
-        dto.setTipo("FALHA_ENERGIA");
-        Event saved = service.salvarEvento(dto);
-        return new ResponseEntity<>(toResponseDTO(saved), HttpStatus.CREATED);
+    public ResponseEntity<Event> registrarFalhaEnergia(@RequestBody Event event) {
+        try {
+            if (event.getDescricao() == null || event.getDescricao().trim().isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
+            event.setTipo("FALHA_ENERGIA");
+            Event saved = service.salvarEvento(event);
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/alerta")
-    public ResponseEntity<EventResponseDTO> registrarAlertaSeguranca(@Valid @RequestBody EventRequestDTO dto) {
-        dto.setTipo("ALERTA_SEGURANCA");
-        Event saved = service.salvarEvento(dto);
-        return new ResponseEntity<>(toResponseDTO(saved), HttpStatus.CREATED);
+    public ResponseEntity<Event> registrarAlertaSeguranca(@RequestBody Event event) {
+        try {
+            if (event.getDescricao() == null || event.getDescricao().trim().isEmpty()) {
+                return ResponseEntity.badRequest().build();
+            }
+            event.setTipo("ALERTA_SEGURANCA");
+            Event saved = service.salvarEvento(event);
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/simular-ataque")
-    public ResponseEntity<EventResponseDTO> simularAtaque() {
-        Event saved = service.simularAtaque();
-        return new ResponseEntity<>(toResponseDTO(saved), HttpStatus.CREATED);
+    public ResponseEntity<Event> simularAtaque() {
+        try {
+            Event saved = service.simularAtaque();
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping
-    public ResponseEntity<List<EventResponseDTO>> listarEventos() {
-        List<Event> eventos = service.listarEventos();
-        List<EventResponseDTO> dtoList = eventos.stream()
-                .map(this::toResponseDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtoList);
-    }
-
-    private EventResponseDTO toResponseDTO(Event event) {
-        EventResponseDTO dto = new EventResponseDTO();
-        dto.setId(event.getId());
-        dto.setTipo(event.getTipo());
-        dto.setDescricao(event.getDescricao());
-        dto.setLocalizacao(event.getLocalizacao());
-        dto.setTimestamp(event.getTimestamp());
-        return dto;
+    public ResponseEntity<List<Event>> listarEventos(
+            @RequestParam(required = false) String tipo) {
+        try {
+            List<Event> eventos = service.listarEventos(tipo);
+            return ResponseEntity.ok(eventos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

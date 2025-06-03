@@ -1,6 +1,5 @@
 package com.example.powerguard.service;
 
-import com.example.powerguard.dto.EventRequestDTO;
 import com.example.powerguard.model.Event;
 import com.example.powerguard.repository.EventRepository;
 import org.springframework.stereotype.Service;
@@ -17,16 +16,15 @@ public class EventService {
         this.repository = repository;
     }
 
-    public Event salvarEvento(EventRequestDTO dto) {
-        Event event = new Event();
-        event.setTipo(dto.getTipo());
-        event.setDescricao(dto.getDescricao());
-        event.setLocalizacao(dto.getLocalizacao());
+    public Event salvarEvento(Event event) {
         event.setTimestamp(LocalDateTime.now());
         return repository.save(event);
     }
 
-    public List<Event> listarEventos() {
+    public List<Event> listarEventos(String tipo) {
+        if (tipo != null && !tipo.isEmpty()) {
+            return repository.findByTipo(tipo);
+        }
         return repository.findAll();
     }
 
