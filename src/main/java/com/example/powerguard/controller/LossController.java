@@ -26,6 +26,7 @@ public class LossController {
             Loss saved = service.saveLoss(loss);
             return ResponseEntity.ok(saved);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
@@ -36,6 +37,7 @@ public class LossController {
             List<Loss> losses = service.getAllLosses();
             return ResponseEntity.ok(losses);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

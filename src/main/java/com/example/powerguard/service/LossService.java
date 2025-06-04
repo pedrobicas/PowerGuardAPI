@@ -4,6 +4,7 @@ import com.example.powerguard.model.Loss;
 import com.example.powerguard.repository.LossRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,6 +16,9 @@ public class LossService {
     }
 
     public Loss saveLoss(Loss loss) {
+        if (loss.getTimestamp() == null) {
+            loss.setTimestamp(LocalDateTime.now());
+        }
         return repository.save(loss);
     }
 
