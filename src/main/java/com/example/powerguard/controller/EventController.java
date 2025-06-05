@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/eventos")     
-@CrossOrigin(origins = {"http://localhost:8081", "http://127.0.0.1:8081"}, 
-             allowedHeaders = "*",
-             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
-             allowCredentials = "true")
+@RequestMapping("/api/eventos")
 public class EventController {
 
     private final EventService service;
