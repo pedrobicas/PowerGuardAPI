@@ -63,24 +63,4 @@ public class AuthController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @Operation(summary = "Refresh Token", description = "Atualiza o token JWT usando o refresh token")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Token atualizado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Refresh token inválido ou expirado")
-    })
-    @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
-        try {
-            String refreshToken = request.get("refreshToken");
-            if (refreshToken == null) {
-                return ResponseEntity.badRequest().body("Refresh token é obrigatório");
-            }
-
-            Map<String, Object> response = authService.refreshToken(refreshToken);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 } 
