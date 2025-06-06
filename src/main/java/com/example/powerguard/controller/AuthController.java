@@ -1,6 +1,10 @@
 package com.example.powerguard.controller;
 
 import com.example.powerguard.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +13,17 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Autenticação", description = "APIs para registro e login de usuários")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
+    @Operation(summary = "Registrar novo usuário", description = "Cria uma nova conta de usuário no sistema")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos ou e-mail já cadastrado")
+    })
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
         try {
@@ -32,6 +42,11 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Login de usuário", description = "Autentica um usuário e retorna um token JWT")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login realizado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Credenciais inválidas")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
         try {

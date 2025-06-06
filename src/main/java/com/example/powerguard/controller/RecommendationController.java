@@ -1,13 +1,25 @@
 package com.example.powerguard.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/recommendations")
+@Tag(name = "Recomendações", description = "APIs para obter recomendações e números de emergência")
+@SecurityRequirement(name = "bearerAuth")
 public class RecommendationController {
 
+    @Operation(summary = "Obter recomendações", description = "Retorna recomendações para diferentes situações de falta de energia")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Recomendações retornadas com sucesso"),
+        @ApiResponse(responseCode = "401", description = "Não autorizado")
+    })
     @GetMapping
     public ResponseEntity<List<Map<String, Object>>> getRecommendations() {
         List<Map<String, Object>> recommendations = new ArrayList<>();
@@ -59,6 +71,11 @@ public class RecommendationController {
         return ResponseEntity.ok(recommendations);
     }
 
+    @Operation(summary = "Obter números de emergência", description = "Retorna lista de números de emergência importantes")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Números de emergência retornados com sucesso"),
+        @ApiResponse(responseCode = "401", description = "Não autorizado")
+    })
     @GetMapping("/emergency")
     public ResponseEntity<Map<String, List<String>>> getEmergencyNumbers() {
         Map<String, List<String>> emergencyNumbers = new HashMap<>();
