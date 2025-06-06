@@ -1,7 +1,7 @@
 # PowerGuard API
 
 ## 📋 Sobre o Projeto
-PowerGuard é uma API desenvolvida para monitoramento e gerenciamento de falhas de energia e impactos cibernéticos. O sistema permite registrar, acompanhar e analisar eventos relacionados a interrupções de energia e ameaças cibernéticas, fornecendo recomendações e insights para mitigação de riscos.
+PowerGuardAPI é uma API desenvolvida para monitoramento e gerenciamento de falhas de energia, impactos cibernéticos, monitoramento e registro de interrupções de energia elétrica. O sistema permite registrar, acompanhar e analisar eventos relacionados a interrupções de energia e ameaças cibernéticas, fornecendo recomendações e insights para mitigação de riscos.
 
 ## 👥 Equipe
 - Felipe Terra - RM99405
